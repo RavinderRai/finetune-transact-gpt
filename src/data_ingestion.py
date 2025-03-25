@@ -36,7 +36,7 @@ def ingest_transactions_dataset(
     if sample_size < 100000:
         df = pd.read_csv(file_path, nrows=sample_size)
     else:
-        logger.info(f"Loading full dataset in chunks of {chunk_size} rows...")
+        logger.info(f"Loading full or large portion of the dataset in chunks of {chunk_size} rows...")
         chunk_iter = pd.read_csv(file_path, chunksize=chunk_size)
         df = pd.concat(chunk_iter, ignore_index=True)
 
@@ -63,10 +63,9 @@ def random_sample(df: pd.DataFrame, n: int = 10000, output_path: str = "data/sam
     return df_sample
 
 
-# Example usage
 if __name__ == "__main__":
     # Note the total dataset size is almost 3GB with shape (7483766, 24)
     df = ingest_transactions_dataset(sample_size=100000) # 100000 is probably sufficient
-    df_sampled = random_sample(df)
-    print("The first few rows of the DataFrame are:")  # This provides a preview of the data contained in the DataFrame.
+    df_sampled = random_sample(df, n=200)
+    print("The first few rows of the DataFrame are:")
     print(df_sampled.head())
